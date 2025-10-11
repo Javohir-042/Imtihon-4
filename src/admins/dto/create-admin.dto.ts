@@ -18,13 +18,15 @@ export class CreateAdminDto {
   @IsNotEmpty()
   full_name: string;
 
+
   @ApiProperty({
-    example: `javohirquromboyev933@gmial.com`,
+    example: `javohirquromboyev933@gmail.com`,
     description: `Admin email manzili`,
   })
   @IsEmail()
   @IsNotEmpty()
   email: string;
+
 
   @ApiProperty({
     example: `Javohir_042`,
@@ -34,6 +36,7 @@ export class CreateAdminDto {
   @IsNotEmpty()
   username: string;
 
+
   @ApiProperty({
     example: `Javohir123!`,
     description: `Strong password `,
@@ -42,6 +45,7 @@ export class CreateAdminDto {
   @IsNotEmpty()
   password: string;
 
+  
   @ApiProperty({
     example: Role.ADMIN,
     enum: Role,

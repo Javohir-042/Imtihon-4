@@ -10,7 +10,7 @@ export interface IPrescription {
     dosage: string;
     frequency: string;
     duration_days: number;
-    prescribed_date: Date;
+    prescribed_date: string;
 }
 
 @Table({
@@ -50,7 +50,7 @@ export class Prescription extends Model<Prescription, IPrescription> {
 
 
     @ApiProperty({
-        example: 2,
+        example: 1,
         description: "Dori (Medication) ID"
     })
     @ForeignKey(() => Medication)
@@ -106,6 +106,6 @@ export class Prescription extends Model<Prescription, IPrescription> {
         type: DataType.DATEONLY,
         allowNull: false
     })
-    declare prescribed_date: Date;
+    declare prescribed_date: string;
 
 }

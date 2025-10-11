@@ -5,18 +5,19 @@ import { LabTest } from "../../lab-tests/model/lab-test.model";
 import { MedicalRecord } from "../../medical-records/model/medical-record.model";
 import { Appointment } from "../../appointments/model/appointment.model";
 import { Payment } from "../../payments/model/payment.model";
+import { Staff } from "../../staffs/model/staff.model";
+import { IsDateString, IsNotEmpty } from "class-validator";
 
 export interface IPatient {
     id?: number;
     full_name: string;
-    data_of_birth: Date;
+    password: string;
+    email: string;
+    date_of_birth: Date;
     gender: GenderEnum;
     phone: string;
     address: string;
     blood_group: string;
-
-    createdAt?: Date;
-    updatedAt?: Date;
 }
 
 @Table({
@@ -26,6 +27,7 @@ export interface IPatient {
     updatedAt: "updated_at"
 })
 export class Patient extends Model<Patient, IPatient> {
+
     @ApiProperty({
         example: 1,
         description: "Bemor ID"
@@ -37,7 +39,6 @@ export class Patient extends Model<Patient, IPatient> {
     })
     declare id: number;
 
-
     @ApiProperty({
         example: "Javohir Quromboyev",
         description: "Bemorning to'liq ismi"
@@ -48,16 +49,24 @@ export class Patient extends Model<Patient, IPatient> {
     })
     declare full_name: string;
 
+    @Column({
+        type: DataType.STRING,
+        allowNull: false,
+        unique: true,
+    })
+    declare email: string;
 
     @ApiProperty({
+        description: "Tug'ilgan sana (YYYY-MM-DD formatda)",
         example: "2000-05-10",
-        description: "Tug'ilgan sana (YYYY-MM-DD formatda)"
     })
+    @IsDateString()
+    @IsNotEmpty()
     @Column({
         type: DataType.DATEONLY,
         allowNull: false
     })
-    declare data_of_birth: Date;
+    declare date_of_birth: string;
 
 
     @ApiProperty({
@@ -71,7 +80,6 @@ export class Patient extends Model<Patient, IPatient> {
     })
     declare gender: GenderEnum;
 
-
     @ApiProperty({
         example: "+998906666666",
         description: "Telefon raqam"
@@ -83,7 +91,6 @@ export class Patient extends Model<Patient, IPatient> {
     })
     declare phone: string;
 
-
     @ApiProperty({
         example: "Toshkent sh., Chilonzor tumani",
         description: "Manzil"
@@ -94,9 +101,8 @@ export class Patient extends Model<Patient, IPatient> {
     })
     declare address: string;
 
-
     @ApiProperty({
-        example: "|||",
+        example: "O+",
         description: "Qon guruhi"
     })
     @Column({
@@ -105,7 +111,15 @@ export class Patient extends Model<Patient, IPatient> {
     })
     declare blood_group: string;
 
-
+    @ApiProperty({
+        example: 'Javohir123!',
+        description: "Password"
+    })
+    @Column({
+        type: DataType.STRING,
+        allowNull: false
+    })
+    declare password: string;
 
     @HasMany(() => Appointment)
     declare appointments: Appointment[];
@@ -118,4 +132,7 @@ export class Patient extends Model<Patient, IPatient> {
 
     @HasMany(() => Payment)
     declare payments: Payment[];
+
+    @HasMany(() => Staff)
+    declare staff: Staff[];
 }

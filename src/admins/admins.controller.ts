@@ -20,13 +20,15 @@ import {
 import { Admin } from "./model/admin.model";
 import { AuthGuard } from "../common/guards/auth.guard";
 import { RolesGuard } from "../common/guards/roles.guard";
+import { Roles } from "../common/decorator/roles.decorator";
+import { Role } from "../common/enum/admin.enum";
 
 @ApiTags("Admin - Boshqaruvchi")
 @UseGuards(AuthGuard, RolesGuard)
 @ApiBearerAuth()
 @Controller("admins")
 export class AdminsController {
-  constructor(private readonly adminsService: AdminsService) {}
+  constructor(private readonly adminsService: AdminsService) { }
 
   @ApiOperation({ summary: "Admin yaratish" })
   @ApiResponse({
@@ -34,6 +36,7 @@ export class AdminsController {
     description: "Yangi qoshilgan admin",
     type: Admin,
   })
+  @Roles(Role.SUPERADMIN)
   @Post()
   create(@Body() createAdminDto: CreateAdminDto) {
     return this.adminsService.create(createAdminDto);
@@ -45,6 +48,7 @@ export class AdminsController {
     description: `Adminlarni ko'rish`,
     type: [Admin],
   })
+  @Roles(Role.SUPERADMIN)
   @Get()
   findAll() {
     return this.adminsService.findAll();
@@ -56,6 +60,7 @@ export class AdminsController {
     description: `Adminlarni by id `,
     type: Admin,
   })
+  @Roles(Role.SUPERADMIN , "ID")
   @Get(":id")
   findOne(@Param("id") id: string) {
     return this.adminsService.findOne(+id);
@@ -67,6 +72,7 @@ export class AdminsController {
     description: `Admin by id orqali o'zgartirish`,
     type: Admin,
   })
+  @Roles(Role.SUPERADMIN, "ID")
   @Patch(":id")
   update(@Param("id") id: string, @Body() updateAdminDto: UpdateAdminDto) {
     return this.adminsService.update(+id, updateAdminDto);
@@ -78,6 +84,7 @@ export class AdminsController {
     description: `Admin o'chirildi`,
     type: Admin,
   })
+  @Roles(Role.SUPERADMIN)
   @Delete(":id")
   remove(@Param("id") id: string) {
     return this.adminsService.remove(+id);

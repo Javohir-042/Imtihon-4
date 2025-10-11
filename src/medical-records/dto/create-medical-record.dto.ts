@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsNumber, IsString, IsDate } from "class-validator";
+import { IsNotEmpty, IsNumber, IsString, IsDate, IsDateString } from "class-validator";
 
 export class CreateMedicalRecordDto {
     @ApiProperty({
@@ -60,7 +60,7 @@ export class CreateMedicalRecordDto {
         description: "Tibbiy yozuv sanasi (YYYY-MM-DD formatda)",
         example: "2025-10-10"
     })
-    @IsDate()
+    @IsDateString()
     @IsNotEmpty()
-    record_date: Date;
+    record_date: string;
 }

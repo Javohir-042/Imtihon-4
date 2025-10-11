@@ -10,9 +10,12 @@ import { Admin } from "./model/admin.model";
 import bcrypt from "bcrypt";
 import { ResData } from "../lib/resData";
 
+
 @Injectable()
 export class AdminsService {
+  [x: string]: any;
   constructor(@InjectModel(Admin) private readonly adminModel: typeof Admin) {}
+
 
   async create(createAdminDto: CreateAdminDto): Promise<ResData<Admin | null>> {
     const { full_name, email, username, password, role, is_active } =
@@ -22,13 +25,11 @@ export class AdminsService {
       throw new NotFoundException("Barchasini kiriting");
     }
 
-    // Email mavjudligini tekshirish
     const existsEmail = await this.adminModel.findOne({ where: { email } });
     if (existsEmail) {
       throw new ConflictException("Email already exists");
     }
 
-    // Username mavjudligini tekshirish
     const existsUsername = await this.adminModel.findOne({
       where: { username },
     });
@@ -50,12 +51,11 @@ export class AdminsService {
     return new ResData<Admin>("Admin create successFully", 201, newAdmin);
   }
 
-  async findAdminByEmail(email: string) {
-    const admin = await this.adminModel.findOne({
-      where: { email },
-    });
-    return admin;
+  async  findEmail(email: string) {
+    const data = await this.adminModel.findOne({ where: { email:email}})
+    return  data
   }
+
 
   async findAll(): Promise<ResData<Admin[]>> {
     const admin = await this.adminModel.findAll({

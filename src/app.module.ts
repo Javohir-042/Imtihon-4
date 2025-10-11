@@ -12,6 +12,8 @@ import { PaymentsModule } from './payments/payments.module';
 import { LabTestsModule } from './lab-tests/lab-tests.module';
 import { MedicalRecordsModule } from './medical-records/medical-records.module';
 import { AppointmentsModule } from './appointments/appointments.module';
+import { RolesModule } from './roles/roles.module';
+import { StaffRolesModule } from './staff_roles/staff_roles.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ envFilePath: ".env", isGlobal: true }),
@@ -50,6 +52,10 @@ import { AppointmentsModule } from './appointments/appointments.module';
     MedicalRecordsModule,
 
     AppointmentsModule,
+
+    RolesModule,
+
+    StaffRolesModule,
   ],
   controllers: [],
   providers: [],

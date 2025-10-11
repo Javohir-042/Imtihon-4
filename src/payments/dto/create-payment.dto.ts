@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { PaymentMethodEnum, PaymentStatusEnum } from "../../common/enum/paymentMetod.enum";
-import { IsNotEmpty, IsNumber, IsEnum, IsDate } from "class-validator";
+import { IsNotEmpty, IsNumber, IsEnum, IsDate, IsDateString } from "class-validator";
 
 export class CreatePaymentDto {
 
@@ -55,8 +55,8 @@ export class CreatePaymentDto {
         description: "To'lov sanasi (YYYY-MM-DD formatda)",
         example: "2025-10-10"
     })
-    @IsDate()
+    @IsDateString()
     @IsNotEmpty()
-    payment_date: Date;
+    payment_date: string;
     
 }

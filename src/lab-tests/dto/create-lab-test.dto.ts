@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { AppEnum } from "../../common/enum/app.enum";
-import { IsNotEmpty, IsNumber, IsString, IsDate, IsEnum } from "class-validator";
+import { IsNotEmpty, IsNumber, IsString, IsDate, IsEnum, IsDateString } from "class-validator";
 
 export class CreateLabTestDto {
     @ApiProperty({
@@ -43,9 +43,9 @@ export class CreateLabTestDto {
         description: "Test sanasi (YYYY-MM-DD formatda)",
         example: "2025-10-10"
     })
-    @IsDate()
+    @IsDateString()
     @IsNotEmpty()
-    test_date: Date;
+    test_date: string;
 
 
     @ApiProperty({

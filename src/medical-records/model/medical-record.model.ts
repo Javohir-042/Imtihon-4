@@ -70,7 +70,7 @@ export class MedicalRecord extends Model<MedicalRecord, IMedicalRecord> {
 
 
     @ApiProperty({
-        example: 2,
+        example: 1,
         description: "Bemor ID"
     })
     @ForeignKey(() => Patient)

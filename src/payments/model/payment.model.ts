@@ -11,7 +11,7 @@ export interface IPayment {
     amount: number;
     payment_method: PaymentMethodEnum;
     payment_status: PaymentStatusEnum;
-    payment_date: Date;
+    payment_date: string;
 }
 
 @Table({
@@ -109,5 +109,5 @@ export class Payment extends Model<Payment, IPayment> {
         type: DataType.DATEONLY,
         allowNull: false
     })
-    declare payment_date: Date;
+    declare payment_date: string;
 }

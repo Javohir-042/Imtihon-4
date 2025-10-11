@@ -39,13 +39,4 @@ export class AuthGuard implements CanActivate {
     }
   }
 
-  async login(user: any) {
-    const token = jwt.sign(
-      { id: user.id, role: user.role },
-      process.env.ACCESS_TOKEN_KEY!,
-      { expiresIn: "15h" },
-    );
-
-    return { access_token: token };
-  }
 }

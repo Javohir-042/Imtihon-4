@@ -5,6 +5,7 @@ import {
     IsEnum,
     IsNotEmpty,
     IsPhoneNumber,
+    IsStrongPassword,
 } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 import { StaffEnum } from "../../common/enum/staffs.enum";
@@ -55,4 +56,14 @@ export class CreateStaffDto {
     @IsBoolean()
     @IsNotEmpty()
     is_active: boolean;
+
+    @ApiProperty({
+        example: 'Javohir1234!',
+        description: 'Xodimlar paroli'
+    })
+    @IsStrongPassword()
+    @IsNotEmpty()
+    password:string
 }
+
+

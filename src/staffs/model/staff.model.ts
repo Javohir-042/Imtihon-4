@@ -1,6 +1,9 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Column, DataType, Model, Table } from "sequelize-typescript";
+import { BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table } from "sequelize-typescript";
 import { StaffEnum } from "../../common/enum/staffs.enum";
+import { Patient } from "../../patients/model/patient.model";
+import { Doctor } from "../../doctors/model/doctor.model";
+import { StaffRole } from "../../staff_roles/model/staff_role.model";
 
 interface StaffCreationAttrs {
     id?: number
@@ -9,6 +12,7 @@ interface StaffCreationAttrs {
     phone: string;
     email: string;
     is_active: boolean;
+    password : string
 }
 
 @Table({
@@ -80,5 +84,34 @@ export class Staff extends Model<Staff, StaffCreationAttrs> {
         defaultValue: true,
     })
     declare is_active: boolean;
+
+
+    @ApiProperty({
+        example: 'Javohir1234!',
+        description: "Xodim paroli",
+    })
+    @Column({
+        type: DataType.STRING,
+        defaultValue: true,
+    })
+    declare password: string;
+
+    
+
+    @ForeignKey(() => Patient)
+    @Column({
+        type: DataType.INTEGER,
+    })
+    declare patient_id: number;
+
+    @BelongsTo(() => Patient)
+    declare patient: Patient;
+
+
+    @HasMany(() => Doctor)
+    declare doctor: Doctor[];
+
+    @HasMany(() => StaffRole)
+    declare staffRole: StaffRole[];
 
 }

@@ -14,9 +14,6 @@ export interface IAppointment {
     appointment_time: string;
     status: AppEnum;
     reason: string;
-
-    createdAt?: Date;
-    updatedAt?: Date;
 }
 
 @Table({

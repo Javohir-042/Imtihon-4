@@ -4,6 +4,8 @@ import { UpdateStaffDto } from "./dto/update-staff.dto";
 import { InjectModel } from "@nestjs/sequelize";
 import { Staff } from "./model/staff.model";
 import { ResData } from "../lib/resData";
+import bcrypt from 'bcrypt'
+import { StaffEnum } from "../common/enum/staffs.enum";
 
 @Injectable()
 export class StaffsService {
@@ -11,10 +13,35 @@ export class StaffsService {
     @InjectModel(Staff) private readonly staffModel: typeof Staff
   ) { }
 
-  async create(createStaffDto: CreateStaffDto): Promise<ResData<Staff | null>> {
-    const { full_name, role, phone, email, is_active } = createStaffDto
 
-    if (!full_name || !role || !phone || !email || !is_active) {
+  async onModuleInit() {
+    const email = process.env.SUPER_ADMIN_EMAIL;
+    const password = process.env.SUPER_ADMIN_PASSWORD;
+    const name = String(process.env.SUPER_ADMIN_NAME) || "Javohir";
+
+    if (!email || !password) return;
+
+    const existSuperAdmin = await this.staffModel.findOne({ where: { email } });
+
+
+    if (!existSuperAdmin) {
+      const hashedPassword = await bcrypt.hash(password, 7);
+      await this.staffModel.create({
+        email,
+        password: hashedPassword,
+        full_name: name,
+        role: StaffEnum.SUPERADMIN,
+        is_active: true,
+        phone: "+998976006787"
+      });
+      console.log(`Superadmin yaratildi: email - ${email} || password - ${password}`);
+    }
+  }
+
+  async create(createStaffDto: CreateStaffDto): Promise<ResData<Staff | null>> {
+    const { full_name, phone, email, is_active, password ,role} = createStaffDto
+
+    if (!full_name || !phone || !email || !is_active || !password || !role) {
       throw new NotFoundException("Iltimos barchasini kiriting")
     }
 
@@ -22,9 +49,18 @@ export class StaffsService {
     if (existsEmail) {
       throw new ConflictException("Email already exists")
     }
-    
-    const newStaffs = await this.staffModel.create({ ...createStaffDto })
-    
+
+    const hashedPassword = await bcrypt.hash(password, 7)
+
+    const newStaffs = await this.staffModel.create({
+      full_name,
+      phone,
+      email,
+      is_active,
+      password: hashedPassword,
+      role
+    })
+
 
     return new ResData<Staff>("Staffs create successFully", 201, newStaffs)
   }
@@ -36,7 +72,7 @@ export class StaffsService {
   }
 
   async findOne(id: number): Promise<ResData<Staff>> {
-    const staff = await this.staffModel.findByPk(id)
+    const staff = await this.staffModel.findByPk(id, { include: { all: true } })
     if (!staff) {
       throw new NotFoundException('Staff not found')
     }
@@ -61,11 +97,20 @@ export class StaffsService {
     return new ResData('Staffs update by id', 200, newStaffs[1][0])
   }
 
-  async remove(id: number) {
-    const deleted = await this.staffModel.destroy({ where: { id } })
-    if(!deleted){
-      throw new NotFoundException('Budna Staffs mavjud emas')
+  async remove(id: number): Promise<ResData<null>> {
+    if(id===1){
+      throw new ConflictException("sz bu iddagi user ochira olmaysz")
     }
-    return { message: `Staffs o'chirildi`}
+    const removed = await this.staffModel.destroy({ where: { id } });
+    if (!removed) {
+      throw new NotFoundException('Staffs not found');
+    }
+    return new ResData('Staffs deleted successfully', 200, null);
+  }
+
+
+
+  async findEmail(email: string) {
+    return await this.staffModel.findOne({ where: { email } })
   }
 }

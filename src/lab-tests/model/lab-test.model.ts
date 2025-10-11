@@ -11,7 +11,7 @@ export interface ILabTest {
     patient_id: number;
     medical_record_id: number;
     test_name: string;
-    test_date: Date;
+    test_date: string;
     status: AppEnum;
     cost: number;
     result: string;
@@ -54,7 +54,7 @@ export class LabTest extends Model<LabTest, ILabTest> {
 
 
     @ApiProperty({
-        example: 2,
+        example: 1,
         description: "Bemor ID"
     })
     @ForeignKey(() => Patient)
@@ -70,7 +70,7 @@ export class LabTest extends Model<LabTest, ILabTest> {
 
 
     @ApiProperty({
-        example: 10,
+        example: 1,
         description: "Tibbiy yozuv ID"
     })
     @ForeignKey(() => MedicalRecord)
@@ -104,7 +104,7 @@ export class LabTest extends Model<LabTest, ILabTest> {
         type: DataType.DATEONLY,
         allowNull: false
     })
-    declare test_date: Date;
+    declare test_date: string;
 
 
     @ApiProperty({

@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsNumber, IsString, IsDate } from "class-validator";
+import { IsNotEmpty, IsNumber, IsString, IsDate, IsDateString } from "class-validator";
 
 export class CreatePrescriptionDto {
 
@@ -52,7 +52,7 @@ export class CreatePrescriptionDto {
         description: "Buyurilgan sana (YYYY-MM-DD formatda)",
         example: "2025-10-10"
     })
-    @IsDate()
+    @IsDateString()
     @IsNotEmpty()
-    prescribed_date: Date;
+    prescribed_date: string;
 }

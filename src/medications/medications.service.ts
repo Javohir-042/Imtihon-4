@@ -30,7 +30,7 @@ export class MedicationsService {
   }
 
   async findOne(id: number): Promise<ResData<Medication>> {
-    const medication = await this.medicationModel.findByPk(id)
+    const medication = await this.medicationModel.findByPk(id, { include: { all: true } })
     if (!medication) {
       throw new NotFoundException("Medication not found")
     }
@@ -49,11 +49,11 @@ export class MedicationsService {
     return new ResData('Staffs update by id', 200, newMedication[1][0])
   }
 
-  async remove(id: number) {
-    const deleted = await this.medicationModel.destroy({ where: { id } })
-    if (!deleted) {
-      throw new NotFoundException('Budna Medication mavjud emas')
+  async remove(id: number): Promise<ResData<null>> {
+    const removed = await this.medicationModel.destroy({ where: { id } });
+    if (!removed) {
+      throw new NotFoundException("Bunday medications mavjud emas");
     }
-    return { message: `Medication o'chirildi` }
+    return new ResData("Medications muvaffaqiyatli o'chirildi", 200, null);
   }
 }

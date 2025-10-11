@@ -30,25 +30,25 @@ export class StaffsController {
     return this.staffsService.create(createStaffDto);
   }
 
-  @Roles(Role.ADMIN,Role.SUPERADMIN,Role.STAFF)
+  @Roles(Role.ADMIN,Role.SUPERADMIN)
   @Get()
   findAll() {
     return this.staffsService.findAll();
   }
 
-  @Roles(Role.ADMIN, Role.SUPERADMIN, Role.STAFF)
+  @Roles(Role.ADMIN, Role.SUPERADMIN, "ID")
   @Get(":id")
   findOne(@Param("id") id: string) {
     return this.staffsService.findOne(+id);
   }
 
-  @Roles(Role.ADMIN, Role.SUPERADMIN, Role.STAFF)
+  @Roles(Role.ADMIN, Role.SUPERADMIN, "ID")
   @Patch(":id")
   update(@Param("id") id: string, @Body() updateStaffDto: UpdateStaffDto) {
     return this.staffsService.update(+id, updateStaffDto);
   }
 
-  @Roles(Role.ADMIN, Role.SUPERADMIN)
+  @Roles(Role.SUPERADMIN, Role.ADMIN)
   @Delete(":id")
   remove(@Param("id") id: string) {
     return this.staffsService.remove(+id);

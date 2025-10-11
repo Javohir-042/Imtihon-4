@@ -21,19 +21,19 @@ export class DoctorsController {
     return this.doctorsService.create(createDoctorDto);
   }
 
-  @Roles(Role.ADMIN, Role.SUPERADMIN, Role.DOCTORS)
+  @Roles(Role.ADMIN, Role.SUPERADMIN)
   @Get()
   findAll() {
     return this.doctorsService.findAll();
   }
 
-  @Roles(Role.ADMIN, Role.SUPERADMIN, Role.DOCTORS)
+  @Roles(Role.ADMIN, Role.SUPERADMIN, "ID")
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.doctorsService.findOne(+id);
   }
 
-  @Roles(Role.ADMIN, Role.SUPERADMIN, Role.DOCTORS)
+  @Roles(Role.ADMIN, Role.SUPERADMIN, "ID")
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateDoctorDto: UpdateDoctorDto) {
     return this.doctorsService.update(+id, updateDoctorDto);

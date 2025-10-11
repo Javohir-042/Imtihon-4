@@ -30,6 +30,7 @@ export class Admin extends Model<Admin, IAdminCreationAttr> {
   })
   declare id: number;
 
+
   @ApiProperty({
     example: "Javohir Quromboyev",
     description: "Adminning ism familiyasi",
@@ -39,6 +40,7 @@ export class Admin extends Model<Admin, IAdminCreationAttr> {
     allowNull: false,
   })
   declare full_name: string;
+
 
   @ApiProperty({
     example: "javohirquromboyev933@gmail.com",
@@ -51,6 +53,7 @@ export class Admin extends Model<Admin, IAdminCreationAttr> {
   })
   declare email: string;
 
+
   @ApiProperty({
     example: "javohir-042",
     description: "Admin username",
@@ -62,6 +65,7 @@ export class Admin extends Model<Admin, IAdminCreationAttr> {
   })
   declare username: string;
 
+
   @ApiProperty({
     example: "Javohir123!",
     description: "Admin password",
@@ -71,6 +75,7 @@ export class Admin extends Model<Admin, IAdminCreationAttr> {
     allowNull: false,
   })
   declare password: string;
+
 
   @ApiProperty({
     example: Role.ADMIN,
@@ -84,6 +89,7 @@ export class Admin extends Model<Admin, IAdminCreationAttr> {
   })
   declare role: Role;
 
+  
   @ApiProperty({
     example: true,
     description: `Admin aktive yoki yo'qligini bildiradi`,
@@ -94,8 +100,11 @@ export class Admin extends Model<Admin, IAdminCreationAttr> {
   })
   declare is_active: boolean;
 
+
   @Column({
     type: DataType.STRING(2000),
   })
   declare refresh_token: string;
+  static findAdminByEmail: any;
+  
 }
