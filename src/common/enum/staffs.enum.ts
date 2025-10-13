@@ -1,8 +1,7 @@
 export enum StaffEnum {
-  NURSE = "nurse",
-  RECEPTIONIST = "receptionist",
-  TECHNICIAN = "technician",
+  NURSE = "NURSE",
+  RECEPTIONIST = "RECEPTIONIST",
+  TECHNICIAN = "TECHNICIAN",
   STAFF="STAFF",
-  SUPERADMIN="SUPERADMIN",
   DOCTORS = "DOCTORS"
 }

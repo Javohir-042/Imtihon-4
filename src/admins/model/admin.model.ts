@@ -77,11 +77,6 @@ export class Admin extends Model<Admin, IAdminCreationAttr> {
   declare password: string;
 
 
-  @ApiProperty({
-    example: Role.ADMIN,
-    enum: Role,
-    description: "Admin Roli ",
-  })
   @Column({
     type: DataType.ENUM(...Object.values(Role)),
     allowNull: false,
@@ -89,7 +84,7 @@ export class Admin extends Model<Admin, IAdminCreationAttr> {
   })
   declare role: Role;
 
-  
+
   @ApiProperty({
     example: true,
     description: `Admin aktive yoki yo'qligini bildiradi`,
@@ -105,6 +100,5 @@ export class Admin extends Model<Admin, IAdminCreationAttr> {
     type: DataType.STRING(2000),
   })
   declare refresh_token: string;
-  static findAdminByEmail: any;
-  
+
 }

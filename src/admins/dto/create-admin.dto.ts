@@ -2,7 +2,6 @@ import { ApiProperty } from "@nestjs/swagger";
 import {
   IsBoolean,
   IsEmail,
-  IsEnum,
   IsNotEmpty,
   IsString,
   IsStrongPassword,
@@ -45,17 +44,6 @@ export class CreateAdminDto {
   @IsNotEmpty()
   password: string;
 
-  
-  @ApiProperty({
-    example: Role.ADMIN,
-    enum: Role,
-    description: `Adminning roli `,
-  })
-  @IsEnum(Role, {
-    message: `role faqat oldindan belgilangan qiymatlardan biri bo'lishi kerak`,
-  })
-  @IsNotEmpty()
-  role: Role;
 
   @ApiProperty({
     example: true,
@@ -63,6 +51,7 @@ export class CreateAdminDto {
   })
   @IsBoolean({ message: `is_active qiymati true yoki false bo'lishi kerak` })
   is_active: boolean;
+
 
 
 }

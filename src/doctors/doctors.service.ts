@@ -1,13 +1,10 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
 import { InjectModel } from '@nestjs/sequelize';
 import { Doctor } from './model/doctor.model';
 import { ResData } from '../lib/resData';
-import bcrypt from 'bcrypt'
 import { Staff } from '../staffs/model/staff.model';
-import { Role } from '../roles/model/role.model';
-import { Roles } from '../common/decorator/roles.decorator';
 import { StaffEnum } from '../common/enum/staffs.enum';
 
 @Injectable()
@@ -20,7 +17,7 @@ export class DoctorsService {
   async create(createDoctorDto: CreateDoctorDto): Promise<ResData<Doctor | null>> {
     const { specialization, staffs_id} = createDoctorDto;
 
-    if ( !specialization ||staffs_id === undefined) {
+    if ( !specialization || staffs_id === undefined) {
       throw new NotFoundException("Barchasini kiriting")
     }
 

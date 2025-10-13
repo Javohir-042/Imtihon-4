@@ -135,4 +135,12 @@ export class Patient extends Model<Patient, IPatient> {
 
     @HasMany(() => Staff)
     declare staff: Staff[];
+
+
+    @Column({
+        type: DataType.STRING(2000),
+    })
+    declare refresh_token: string;
+
+
 }

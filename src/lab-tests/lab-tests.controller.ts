@@ -36,7 +36,7 @@ export class LabTestsController {
     return this.labTestsService.findOne(+id);
   }
 
-  @Roles(Role.ADMIN, Role.SUPERADMIN, Role.DOCTORS)
+  @Roles(Role.ADMIN, Role.SUPERADMIN, Role.DOCTORS, 'ID')
   @ApiOperation({ summary: "Lab testni yangilash" })
   @Patch(":id")
   update(@Param("id") id: string, @Body() updateLabTestDto: UpdateLabTestDto) {

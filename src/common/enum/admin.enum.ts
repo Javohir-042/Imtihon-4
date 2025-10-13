@@ -1,7 +1,7 @@
 export enum Role {
-  SUPERADMIN = "superadmin",
-  ADMIN = "admin",
-  DOCTORS = 'doctors',
-  STAFF = 'staff',
+  SUPERADMIN = "SUPERADMIN",
+  ADMIN = "ADMIN",
+  DOCTORS = 'DOCTORS',
+  STAFF = 'STAFF',
   PATIENTS = 'PATIENTS',
 }

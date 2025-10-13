@@ -29,21 +29,21 @@ export class MedicalRecordsController {
     return this.medicalRecordsService.findAll();
   }
 
-  @Roles(Role.ADMIN, Role.SUPERADMIN, Role.DOCTORS)
+  @Roles(Role.ADMIN, Role.SUPERADMIN, Role.DOCTORS, "ID")
   @ApiOperation({ summary: "Id bo'yicha tibbiy yozuvni olish" })
   @Get(":id")
   findOne(@Param("id") id: string) {
     return this.medicalRecordsService.findOne(+id);
   }
 
-  @Roles(Role.ADMIN, Role.SUPERADMIN)
+  @Roles(Role.ADMIN, Role.SUPERADMIN, Role.DOCTORS, "ID")
   @ApiOperation({ summary: "Tibbiy yozuvni yangilash" })
   @Patch(":id")
   update(@Param("id") id: string, @Body() updateMedicalRecordDto: UpdateMedicalRecordDto) {
     return this.medicalRecordsService.update(+id, updateMedicalRecordDto);
   }
 
-  @Roles(Role.ADMIN, Role.SUPERADMIN)
+  @Roles(Role.ADMIN, Role.SUPERADMIN, Role.DOCTORS)
   @ApiOperation({ summary: "Tibbiy yozuvni o'chirish" })
   @Delete(":id")
   remove(@Param("id") id: string) {

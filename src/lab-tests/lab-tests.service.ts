@@ -31,12 +31,12 @@ export class LabTestsService {
     }
 
 
-    const patient = await this.doctorModel.findByPk(patient_id)
+    const patient = await this.patientModel.findByPk(patient_id)
     if (!patient) {
       throw new NotFoundException('Bunday patient_id topilmadi ')
     }
 
-    const medical_record = await this.doctorModel.findByPk(medical_record_id)
+    const medical_record = await this.medicalRecordModel.findByPk(medical_record_id)
     if (!medical_record) {
       throw new NotFoundException('Bunday MedicalRecord_id topilmadi ')
     }

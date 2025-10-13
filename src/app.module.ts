@@ -12,8 +12,10 @@ import { PaymentsModule } from './payments/payments.module';
 import { LabTestsModule } from './lab-tests/lab-tests.module';
 import { MedicalRecordsModule } from './medical-records/medical-records.module';
 import { AppointmentsModule } from './appointments/appointments.module';
-import { RolesModule } from './roles/roles.module';
-import { StaffRolesModule } from './staff_roles/staff_roles.module';
+import { BotModule } from './bot/bot.module';
+import { TelegrafModule } from "nestjs-telegraf";
+import { BOT_NAME } from "./app.constants";
+
 @Module({
   imports: [
     ConfigModule.forRoot({ envFilePath: ".env", isGlobal: true }),
@@ -31,6 +33,15 @@ import { StaffRolesModule } from './staff_roles/staff_roles.module';
       sync: { alter: true }, // force bu tablellarni ochirib tashlaydi  alter ishatish
     }),
 
+    TelegrafModule.forRootAsync({
+      botName: BOT_NAME,
+      useFactory: () => ({
+        token: process.env.BOT_TOKEN!,
+        middlewares: [],
+        include: [BotModule]
+      })
+    }),
+
     AdminsModule,
 
     AuthModule,
@@ -38,6 +49,10 @@ import { StaffRolesModule } from './staff_roles/staff_roles.module';
     StaffsModule,
 
     DoctorsModule,
+
+    AppointmentsModule,
+
+    MedicalRecordsModule,
 
     MedicationsModule,
 
@@ -49,13 +64,8 @@ import { StaffRolesModule } from './staff_roles/staff_roles.module';
 
     LabTestsModule,
 
-    MedicalRecordsModule,
+    BotModule,
 
-    AppointmentsModule,
-
-    RolesModule,
-
-    StaffRolesModule,
   ],
   controllers: [],
   providers: [],

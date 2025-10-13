@@ -2,17 +2,20 @@ import {
   Body,
   Controller,
   HttpCode,
+  Param,
+  ParseIntPipe,
   Post,
   Res,
 } from "@nestjs/common";
 import { AuthService } from "./auth.service";
-import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { Roles } from "../common/decorator/roles.decorator";
 import { Admin } from "../admins/model/admin.model";
 import type { Response } from "express";
 import { CookieGetter } from "../common/decorator/cookie-getter.decorator";
 import { CreatePatientDto } from "../patients/dto/create-patient.dto";
 import { SignInDto } from "../patients/dto/signIn.dto";
+import { Role } from "../common/enum/admin.enum";
 
 @ApiTags("Auth -- Token olish")
 @Controller("auth")
@@ -25,6 +28,8 @@ export class AuthController {
     description: "Yangi qoshilgan foydalanuvchi",
     type: Admin,
   })
+  @Roles(Role.ADMIN, Role.DOCTORS, Role.SUPERADMIN)
+  @ApiBearerAuth()
   @Roles("public")
   @Post('patient/signup')
   async signUpPatient(@Body() createPatientDto: CreatePatientDto) {
@@ -39,10 +44,11 @@ export class AuthController {
     example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
   })
   @Roles("public")
-  @Post('patient/signin')
-  async signInPatient(@Body() signInDto: SignInDto, @Res({ passthrough: true }) res: Response) {
-    return this.authService.signIn(signInDto);
+  @Post('admin/signin')
+  async signInAdmin(@Body() signInDto: SignInDto, @Res({ passthrough: true }) res: Response) {
+    return this.authService.signInAdmin(signInDto,res);
   }
+
 
 
   @ApiOperation({ summary: "Auth token chiqarish" })
@@ -52,9 +58,9 @@ export class AuthController {
     example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
   })
   @Roles("public")
-  @Post('admin/signin')
-  async signInAdmin(@Body() signInDto: SignInDto, @Res({ passthrough: true }) res: Response) {
-    return this.authService.signInAdmin(signInDto);
+  @Post('patient/signin')
+  async signInPatient(@Body() signInDto: SignInDto, @Res({ passthrough: true }) res: Response) {
+    return this.authService.signInPatient(signInDto, res);
   }
 
 
@@ -64,21 +70,7 @@ export class AuthController {
     @Body() signInDto: SignInDto,
     @Res({ passthrough: true }) res: Response
   ) {
-    const { token } = await this.authService.signInStaffs(signInDto);
-
-    res.cookie('access_token', token.accessToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'strict',
-    });
-
-    res.cookie('refresh_token', token.refreshToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'strict',
-    });
-
-    return { token };
+    return this.authService.signInStaffs(signInDto, res)
   }
 
 
@@ -86,35 +78,88 @@ export class AuthController {
   @ApiOperation({ summary: "Auth token O'chirish" })
   @ApiResponse({
     status: 200,
-    description: "Foydalanuvchining tokeni",
-    example: "Token o'chirildi",
+    description: "Foydalanuvchining tokeni o'chirildi",
+    example: { message: "Signed out successfully" },
   })
   @HttpCode(200)
-  @Post("signOut")
-  signOut(
+  @Post("admin/signOut")
+  async signAdminOut(
     @CookieGetter("refreshToken") refreshToken: string,
     @Res({ passthrough: true }) res: Response,
   ) {
-    res.clearCookie('refresh_token')
-    return { message: "Signed out successfully" }
+    return this.authService.signAdminOut(refreshToken, res);
   }
 
 
+  @ApiOperation({ summary: "Auth token O'chirish" })
+  @ApiResponse({
+    status: 200,
+    description: "Foydalanuvchining tokeni o'chirildi",
+    example: { message: "Signed out successfully" },
+  })
+  @HttpCode(200)
+  @Post("patient/signOut")
+  async signPatientOut(
+    @CookieGetter("refreshToken") refreshToken: string,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    return this.authService.signPatientOut(refreshToken, res);
+  }
 
 
-  // @ApiOperation({ summary: "Auth refresh token chiqarish" })
-  // @ApiResponse({
-  //   status: 200,
-  //   description: "Foydalanuvchining tokeni",
-  //   example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  // })
-  // @HttpCode(200)
-  // @Post(":id/refresh")
-  // refresh(
-  //   @Param("id", ParseIntPipe) id: number,
-  //   @CookieGetter("refreshToken") refreshToken: string,
-  //   @Res({ passthrough: true }) res: Response,
-  // ) {
-  //   return this.authService.refreshToken(id, refreshToken, res);
-  // }
+  @ApiOperation({ summary: "Auth token O'chirish" })
+  @ApiResponse({
+    status: 200,
+    description: "Foydalanuvchining tokeni o'chirildi",
+    example: { message: "Signed out successfully" },
+  })
+  @HttpCode(200)
+  @Post("staff/signOut")
+  async signStaffOut(
+    @CookieGetter("refreshToken") refreshToken: string,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    return this.authService.signStaffOut(refreshToken, res);
+  }
+
+
+  @ApiOperation({ summary: "Admin refresh token olish" })
+  @ApiResponse({ status: 200, description: "Yangi access token qaytariladi" })
+  @HttpCode(200)
+  @Post(":id/adminRefresh")
+  refresh(
+    @Param("id", ParseIntPipe) id: number,
+    @CookieGetter("refreshToken") refreshToken: string,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    return this.authService.refreshAdminToken(id, refreshToken, res);
+  }
+
+
+  @ApiOperation({ summary: "Patient refresh token olish" })
+  @ApiResponse({ status: 200, description: "Yangi access token qaytariladi" })
+  @HttpCode(200)
+  @Post(":id/patientRefresh")
+  refreshPatient(
+    @Param("id", ParseIntPipe) id: number,
+    @CookieGetter("refreshToken") refreshToken: string,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    return this.authService.refreshPatientToken(id, refreshToken, res);
+  }
+
+
+  @ApiOperation({ summary: "Staff refresh token olish" })
+  @ApiResponse({ status: 200, description: "Yangi access token qaytariladi" })
+  @HttpCode(200)
+  @Post(":id/staffRefresh")
+  refreshStaff(
+    @Param("id", ParseIntPipe) id: number,
+    @CookieGetter("refreshToken") refreshToken: string,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    return this.authService.refreshStaffToken(id, refreshToken, res);
+  }
+
+
 }

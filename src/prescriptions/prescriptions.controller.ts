@@ -15,28 +15,32 @@ import { Role } from '../common/enum/admin.enum';
 export class PrescriptionsController {
   constructor(private readonly prescriptionsService: PrescriptionsService) {}
 
-  @Roles(Role.PATIENTS)
+  @Roles(Role.SUPERADMIN, Role.ADMIN, Role.DOCTORS)
   @Post()
   create(@Body() createPrescriptionDto: CreatePrescriptionDto) {
     return this.prescriptionsService.create(createPrescriptionDto);
   }
 
 
+  @Roles(Role.DOCTORS, Role.SUPERADMIN, Role.ADMIN)
   @Get()
   findAll() {
     return this.prescriptionsService.findAll();
   }
 
+  @Roles(Role.DOCTORS, Role.SUPERADMIN, Role.ADMIN, "ID")
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.prescriptionsService.findOne(+id);
   }
 
+  @Roles(Role.DOCTORS, Role.SUPERADMIN, Role.ADMIN, "ID")
   @Patch(':id')
   update(@Param('id') id: string, @Body() updatePrescriptionDto: UpdatePrescriptionDto) {
     return this.prescriptionsService.update(+id, updatePrescriptionDto);
   }
 
+  @Roles(Role.DOCTORS, Role.SUPERADMIN, Role.ADMIN)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.prescriptionsService.remove(+id);

@@ -28,7 +28,7 @@ import { Role } from "../common/enum/admin.enum";
 export class PatientsController {
   constructor(private readonly patientsService: PatientsService) { }
 
-  @Roles(Role.ADMIN, Role.SUPERADMIN, )
+  @Roles(Role.ADMIN, Role.SUPERADMIN, Role.DOCTORS )
   @ApiOperation({ summary: "Yangi bemor yaratish" })
   @Post()
   create(@Body() createPatientDto: CreatePatientDto) {

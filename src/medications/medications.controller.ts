@@ -27,19 +27,19 @@ export class MedicationsController {
     return this.medicationsService.findAll();
   }
 
-  @Roles(Role.ADMIN, Role.SUPERADMIN, Role.DOCTORS)
+  @Roles(Role.ADMIN, Role.SUPERADMIN, Role.DOCTORS, "ID")
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.medicationsService.findOne(+id);
   }
 
-  @Roles(Role.ADMIN, Role.SUPERADMIN, Role.DOCTORS)
+  @Roles(Role.ADMIN, Role.SUPERADMIN, Role.DOCTORS, "ID")
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateMedicationDto: UpdateMedicationDto) {
     return this.medicationsService.update(+id, updateMedicationDto);
   }
 
-  @Roles(Role.ADMIN, Role.SUPERADMIN)
+  @Roles(Role.ADMIN, Role.SUPERADMIN, Role.DOCTORS)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.medicationsService.remove(+id);

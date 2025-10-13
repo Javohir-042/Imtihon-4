@@ -3,7 +3,6 @@ import { BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table } from "
 import { StaffEnum } from "../../common/enum/staffs.enum";
 import { Patient } from "../../patients/model/patient.model";
 import { Doctor } from "../../doctors/model/doctor.model";
-import { StaffRole } from "../../staff_roles/model/staff_role.model";
 
 interface StaffCreationAttrs {
     id?: number
@@ -111,7 +110,11 @@ export class Staff extends Model<Staff, StaffCreationAttrs> {
     @HasMany(() => Doctor)
     declare doctor: Doctor[];
 
-    @HasMany(() => StaffRole)
-    declare staffRole: StaffRole[];
+
+    @Column({
+        type: DataType.STRING(2000),
+    })
+    declare refresh_token: string;
+
 
 }

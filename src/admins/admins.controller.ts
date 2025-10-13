@@ -22,6 +22,7 @@ import { AuthGuard } from "../common/guards/auth.guard";
 import { RolesGuard } from "../common/guards/roles.guard";
 import { Roles } from "../common/decorator/roles.decorator";
 import { Role } from "../common/enum/admin.enum";
+import { PhoneAdminDto } from "./dto/phone.admin.dto";
 
 @ApiTags("Admin - Boshqaruvchi")
 @UseGuards(AuthGuard, RolesGuard)
@@ -41,6 +42,7 @@ export class AdminsController {
   create(@Body() createAdminDto: CreateAdminDto) {
     return this.adminsService.create(createAdminDto);
   }
+
 
   @ApiOperation({ summary: `Admin larni ko'rish` })
   @ApiResponse({
@@ -88,5 +90,12 @@ export class AdminsController {
   @Delete(":id")
   remove(@Param("id") id: string) {
     return this.adminsService.remove(+id);
+  }
+
+
+
+  @Post("new-otp")
+  newOtp(@Body() phoneAdminDto: PhoneAdminDto){
+    return this.adminsService.newOtp(phoneAdminDto)
   }
 }
